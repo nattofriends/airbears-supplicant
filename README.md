@@ -6,6 +6,10 @@ connect to the AirBears network, saving you from having to log into CalNet
 each time! And it's not like other hacky solutions that require you to press a
 bookmarklet in your web browser.
 
+Binaries
+--------
+If you don't feel like building this, you should [download the binary here](http://slush.warosu.org/stuff/airbears_supplicant.exe).
+
 On Credentials
 --------------
 In order to be able to authenticate to CalNet with your CalNet ID and passphrase, the Supplicant needs to be able to store them around in a way that it can access later. This is a problem inherent with password managers, browser "Remember your password?" dialogs, and the like. Please be warned that your CalNet ID and passphrase will be stored on disk (not in plain text). 
