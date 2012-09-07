@@ -21,3 +21,6 @@ AirBears Supplicant is designed for Windows, and makes use of several Windows co
 Build Dependencies
 ------------------
 AirBears Supplicant runs on 32-bit Python 2.7. The following are build dependencies: wxPython 2.9.4.0, py2exe 0.6.9, and pywin32 2.1.7. `build_exe.py` is a py2exe configuration script, which will build the application into `dist/airbears_supplicant.exe`. To build the application, run `build.bat`.
+
+##### Why 32-bit?
+I don't trust 64-bit wxPython and py2exe.
