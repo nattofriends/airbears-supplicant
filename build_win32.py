@@ -43,6 +43,7 @@ options = {
 	'py2exe': {	
         'bundle_files': 1, 
 		'optimize': 2,
+        'excludes': ['wlan_darwin'],
         'dll_excludes': ['w9xpopen.exe'],
         "ascii": True,
         "excludes": ['doctest', 'pdb', 'unittest', 'difflib', 'inspect', 'pyreadline', 'optparse', 'pickle', 'tcl', 'Tkconstants', 'Tkinter', 'curses', 'email', 'bz2', '_scproxy', 'email.utils', 'win32ui']

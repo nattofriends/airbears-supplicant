@@ -1,9 +1,10 @@
 """Authentication to AirBears"""
 
+import xplat
 from log import log
-import zlib, hashlib, os, urllib, urllib2, re, cookielib, time, socket, urlparse, msvcrt
+import zlib, hashlib, os, urllib, urllib2, re, cookielib, time, socket, urlparse
 
-CREDENTIAL_FILE = os.path.join(os.environ["APPDATA"], "airbears_credentials")
+CREDENTIAL_FILE = os.path.join(xplat.appdata, "airbears_credentials")
 CAS_URL = "https://auth.berkeley.edu/cas/login?service=https%3a%2f%2fwlan.berkeley.edu%2fcgi-bin%2flogin%2fcalnet.cgi%3fsubmit%3dCalNet%26url%3d"
 WLAN_LANDING_URL = "https://wlan.berkeley.edu/cgi-bin/login/calnet.cgi?url=&count=1"
 
@@ -113,6 +114,13 @@ if __name__ == '__main__':
     new_user = raw_input("CalNet ID: ")
     new_pass = raw_input("CalNet passphrase: ")
     write_auth(new_user, new_pass)
-    print "Press any key to continue"
-    msvcrt.getch()
+    
+    if sys.platform == "win32":
+        import msvcrt
+        msvcrt.getch()
+    elif sys.platform == "darwin":
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+        tty.setraw(sys.stdin.fileno())
+        sys.stdin.read(1)
     

@@ -1,4 +1,6 @@
-import auth, notification, wlan, ui
+#!/usr/bin/env python
+
+import auth, notification, wlan
 from log import log, lock
 
 import sys, threading
@@ -6,6 +8,7 @@ import sys, threading
 NO_UI = False
 
 if not NO_UI:
+    import ui
     tb = ui.init()
     
 if not lock():

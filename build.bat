@@ -1,1 +1,1 @@
-python -OO build_exe.py py2exe
+python -OO build_win32.py py2exe
