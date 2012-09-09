@@ -7,7 +7,7 @@ each time! Now in a handy Android version.
 
 About this Fork
 --------
-This is a separate branch of the excellent Windows/Mac [Airbears Supplicant](https://github.com/nattofriends/airbears-supplicant) written by nattofriends. (Why I forked the repository, I don't even know, as this app really has no code in common at all to the Python PC version.
+This is a separate branch of the excellent Windows/Mac [Airbears Supplicant](https://github.com/nattofriends/airbears-supplicant) written by nattofriends. (Why I forked the repository, I don't even know, as this app really has no code in common at all to the Python PC version.)
 
 Credentials
 --------------
