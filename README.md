@@ -3,17 +3,20 @@
 AirBears Supplicant does what it says on the tin.
 It stores your CalNet credentials and automatically logs you in when you 
 connect to the AirBears network, saving you from having to log into CalNet
-each time! And it's not like other hacky solutions that require you to press a
-bookmarklet in your web browser.
+each time! Now in a handy Android version.
 
-On Credentials
+About this Fork
+--------
+This is a separate branch of the excellent Windows/Mac [Airbears Supplicant](https://github.com/nattofriends/airbears-supplicant) written by nattofriends. (Why I forked the repository, I don't even know, as this app really has no code in common at all to the Python PC version.
+
+Credentials
 --------------
-In order to be able to authenticate to CalNet with your CalNet ID and passphrase, the Supplicant needs to be able to store them around in a way that it can access later. This is a problem inherent with password managers, browser "Remember your password?" dialogs, and the like. Please be warned that your CalNet ID and passphrase will be stored on disk (not in plain text). 
+AirBears Supplicant uses the Android Account Manager to securely store your CalNet ID and passphrase. As a result, it requires several AccountManager related permissions, including, but not limited to, `AUTHENTICATE_ACCOUNTS`, `GET_ACCOUNTS`, `MANAGE_ACCOUNTS`, and `USE_CREDENTIALS`.
 
 Platform Dependencies
 ---------------------
-AirBears Supplicant is designed for Windows, and makes use of several Windows components to receive network change notifications and query wireless interfaces.
+Currently, Airbears Supplicant targets Android 2.2 and above. This may change in the future, but as I own a device running Android 2.3, the SDK level will never rise above that.
 
-Build Dependencies
-------------------
-AirBears Supplicant runs on 32-bit Python 2.7. The following are build dependencies: wxPython 2.9.4.0, py2exe 0.6.9, and pywin32 2.1.7. `build_exe.py` is a py2exe configuration script, which will build the application into `dist/airbears_supplicant.exe`. To build the application, run `build.bat`.
+Additional Permissions
+----------------------
+The `INTERNET` permission is required, and its use is self explanatory. AirBears Supplicant will never transmit your password to any third-party besides the CalNet Authentation Service.

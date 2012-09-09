@@ -1,0 +1,16 @@
+*.class
+
+# ignore packages
+*.apk
+*.ap_
+
+# ignore generated file folders
+bin/**
+gen/**
+
+# and local files and whatnot
+.settings/
+local.properties
+
+# Locally stored "Eclipse launch configurations"
+*.launch

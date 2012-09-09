@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">Airbears Supplicant</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_main">Airbears Supplicant</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="save_and_validate">Save and Validate</string>
+    <string name="menu_exit">Exit Airbears Supplicant</string>
+
+</resources>
