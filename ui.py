@@ -3,7 +3,12 @@
 import auth
 from log import log, unlock
 
-import wx, sys, os, ctypes, threading, win32api
+import wx, sys, os, ctypes, threading
+
+if sys.platform == "win32":
+    import win32api
+if sys.platform == "darwin":
+    from Foundation import NSAutoreleasePool
 
 app = None
 
@@ -23,8 +28,12 @@ class TaskBarIcon(wx.TaskBarIcon):
     def __init__(self, dialog):
         super(TaskBarIcon, self).__init__()
 
+        # Under Darwin we have no such trickery such as obtain a handle to our own module. Instead just bundle the icon (temporary).
         if os.path.exists(TRAY_ICON):
             self.SetIcon(wx.IconFromBitmap(wx.Bitmap(TRAY_ICON)), TRAY_TOOLTIP)
+        # So normally I would just set data_file properly in build_darwin, but for some reason trying to create a path (assets/) in the bundle makes py2app throw a fit. This should be fixed, preferably by querying the bundle's icns.
+        elif sys.platform == "darwin":
+            self.SetIcon(wx.IconFromBitmap(wx.Bitmap(os.path.basename(TRAY_ICON))))
         else: # set from executable
             self.SetIcon(wx.Icon(win32api.GetModuleFileName(win32api.GetModuleHandle(None)), wx.BITMAP_TYPE_ICO), TRAY_TOOLTIP)
 
@@ -37,6 +46,7 @@ class TaskBarIcon(wx.TaskBarIcon):
         return menu
     def onShowChangeCredentials(self, event):
         self.dialog.Show()
+        self.dialog.Raise() # They don't automatically go to the front in OSX for some reason
     def onExit(self, event):
         wx.CallAfter(self.Destroy)
     def notice(self, text):
@@ -59,6 +69,8 @@ class CalNetPasswordDialog(wx.Frame):
         
         if os.path.exists(TRAY_ICON):
             self.SetIcon(wx.IconFromBitmap(wx.Bitmap(TRAY_ICON)))
+        elif sys.platform == "darwin":
+            self.SetIcon(wx.IconFromBitmap(wx.Bitmap(os.path.basename(TRAY_ICON))))
         else: # set from executable
             self.SetIcon(wx.Icon(win32api.GetModuleFileName(win32api.GetModuleHandle(None)), wx.BITMAP_TYPE_ICO))
         
@@ -104,19 +116,14 @@ class CalNetPasswordDialog(wx.Frame):
         self.Centre()
         if credentials is None:
             self.Show()
+            self.Raise()
         
     def startStatusTimer(self):
         def after():
+            pool = NSAutoreleasePool.alloc().init()
             self.status.SetLabel("")
             self.status.SetForegroundColour((0, 0, 0))
-        threading.Timer(self.STATUS_DELAY, after).start() # Hope they don't re-enter too fast!
-
-    def startCloseWindowTimer(self):
-        def after():
-            self.status.SetLabel("")
-            self.status.SetForegroundColour((0, 0, 0))
-            self.password.SetValue("")
-            self.Hide()
+            del pool
         threading.Timer(self.STATUS_DELAY, after).start() # Hope they don't re-enter too fast!
         
     # http://wiki.wxpython.org/LongRunningTasks
@@ -141,20 +148,24 @@ class CalNetPasswordDialog(wx.Frame):
             threading.Thread(target = self.check_auth, args = (username, password)).start()
             
     def onAuthCheckDone(self, event):
+        # Main thread -- worker thread posted event back to us
         self.button_ok.Enable()
         self.button_cancel.Enable()
         if event.data[0] == True: # Authenticated successfully
             # We're done, let's get out of here
             auth.write_auth(event.data[1], event.data[2])
             self.status.SetLabel("Success!")
-            self.password.SetValue("")
             def hideAndClear():
+                # Will be run from worker thread, create own NSAutoreleasePool
+                pool = NSAutoreleasePool.alloc().init()
+                self.password.SetValue("")
                 self.status.SetLabel("")
                 self.Hide()
+                del pool
             threading.Timer(self.STATUS_DELAY, hideAndClear).start()
         else:
             self.status.SetForegroundColour((255, 0, 0))
-            self.status.SetLabel("Bad user/pass")
+            self.status.SetLabel("Bad Calnet ID/passphrase")
         
     def onDontClose(self, event):
         # TextCtrl contents should be cleared now
@@ -177,6 +188,7 @@ class ResultEvent(wx.PyEvent):
         self.data = data
          
 def init():
+    # Don't need to allocate NSAutoreleasePool here, we are on main thread and it was done for us on import
     global app
     app = wx.App()
     dialog = CalNetPasswordDialog(None)

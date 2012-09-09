@@ -1,8 +1,10 @@
+#!/usr/bin/env python
+
 """Authentication to AirBears"""
 
 import xplat
 from log import log
-import zlib, hashlib, os, urllib, urllib2, re, cookielib, time, socket, urlparse
+import zlib, hashlib, os, urllib, urllib2, re, cookielib, time, socket, urlparse, sys
 
 CREDENTIAL_FILE = os.path.join(xplat.appdata, "airbears_credentials")
 CAS_URL = "https://auth.berkeley.edu/cas/login?service=https%3a%2f%2fwlan.berkeley.edu%2fcgi-bin%2flogin%2fcalnet.cgi%3fsubmit%3dCalNet%26url%3d"
@@ -89,7 +91,16 @@ def authenticate(username, password, cas_no_redir = False): # [username, passwor
     else:
         cas_real_url = CAS_URL
         
-    calnet_noop = re.findall(r'_cNoOpConversation.*?"', opener.open(cas_real_url).read())[0].replace('"', '')
+    # Slight possibility somehow we've already logged in...
+    # The reason this happens is because I think the network state changes again on AirBears login.
+    # So we get another notification and try to log in again.
+    first_calnet_login = opener.open(cas_real_url).read()
+    if first_calnet_login.find("already logged in to") != -1:
+        log("Already logged in before attempting authentication (WLAN authentication redirect succeeded")
+        return True
+
+    # Otherwise, attempt the authentication
+    calnet_noop = re.findall(r'_cNoOpConversation.*?"', first_calnet_login)[0].replace('"', '')
     credentials.append(calnet_noop)
     post_values = urllib.urlencode(zip(field_names, credentials))
     cas_result = opener.open(cas_real_url, post_values).read()
@@ -111,16 +122,20 @@ def authenticate(username, password, cas_no_redir = False): # [username, passwor
 
 if __name__ == '__main__':
     # authenticate()
+    print "Your CalNet credentials will be overwritten without checking for their validity."
     new_user = raw_input("CalNet ID: ")
     new_pass = raw_input("CalNet passphrase: ")
     write_auth(new_user, new_pass)
-    
+    print "Press any key to continue."
     if sys.platform == "win32":
         import msvcrt
         msvcrt.getch()
     elif sys.platform == "darwin":
+        import sys, tty, termios
         fd = sys.stdin.fileno()
         old_settings = termios.tcgetattr(fd)
-        tty.setraw(sys.stdin.fileno())
-        sys.stdin.read(1)
-    
+        try:
+            tty.setraw(fd)
+            sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)

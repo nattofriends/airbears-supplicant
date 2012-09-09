@@ -8,19 +8,23 @@ bookmarklet in your web browser.
 
 Binaries
 --------
-If you don't feel like building this, you should [download the binary here](http://slush.warosu.org/stuff/airbears_supplicant.exe).
+If you don't feel like building this, you should [download the binary here](http://slush.warosu.org/stuff/airbears_supplicant.exe). A Mac binary is Coming Soon.
 
-On Credentials
+Credentials
 --------------
 In order to be able to authenticate to CalNet with your CalNet ID and passphrase, the Supplicant needs to be able to store them around in a way that it can access later. This is a problem inherent with password managers, browser "Remember your password?" dialogs, and the like. Please be warned that your CalNet ID and passphrase will be stored on disk (not in plain text). 
 
 Platform Dependencies
 ---------------------
-AirBears Supplicant is designed for Windows, and makes use of several Windows components to receive network change notifications and query wireless interfaces.
+AirBears Supplicant works on Windows and Mac OS X, using platform-specific code to receive network change events and query the wireless interface. This functionality requires Windows XP SP2 or higher, or Mac OS X 10.6 or higher.
 
 Build Dependencies
 ------------------
-AirBears Supplicant runs on 32-bit Python 2.7. The following are build dependencies: wxPython 2.9.4.0, py2exe 0.6.9, and pywin32 2.1.7. `build_exe.py` is a py2exe configuration script, which will build the application into `dist/airbears_supplicant.exe`. To build the application, run `build.bat`.
+AirBears Supplicant runs on Python 2.7. 
+py2exe and py2app are used on their respective platforms to create "binary" files for distribution.
 
-##### Why 32-bit?
-I don't trust 64-bit wxPython and py2exe.
+wxPython 2.9 or greater is necessary to build. OS X builds current use wxPython Cocoa and has not been tested with wxPython Carbon.
+
+On Windows, the most recent version of pywin32 (2.1.7) is also required.
+
+There is a simple `Makefile` which will build for both platforms. 

@@ -15,7 +15,9 @@ CoreWLANBundle.load()
 
 def has_airbears():
     connected = get_connected_wireless()
-    log("Active connected network:" + connected)
+    if connected is None:
+        return False
+    log("Active connected network: " + connected)
     return AIRBEARS == connected
     
 
@@ -29,6 +31,5 @@ def get_connected_wireless(): # I _think_ I might have to call [CWInterface inte
         # raise SystemError('Unable to load wireless interface.') # If it's not there, don't complain
         return ""
         
-    ssid = default_interface.ssid
-    default_interface.release()
-    return ssid
+    return default_interface._.ssid
+

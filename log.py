@@ -12,7 +12,7 @@ else:
 LOG_TO_FILE = True
 
 LOCK_FILE = os.path.join(xplat.appdata, "airbears_supplicant_lockfile")
-lock = None
+lockfile = None
 
 LOG_FILE = os.path.join(xplat.appdata, "airbears_supplicant_log")
 if LOG_TO_FILE:
@@ -28,22 +28,25 @@ def log(msg):
         print formatted
 
 def lock(): # This really shouldn't be here
-    global lock
-    lock = open(LOCK_FILE, "w")
+    global lockfile
+    lockfile = open(LOCK_FILE, "w")
     try:
         if sys.platform == "win32":
-            msvcrt.locking(lock.fileno(), msvcrt.LK_NBLCK, 1) # IOError on failure
+            msvcrt.locking(lockfile.fileno(), msvcrt.LK_NBLCK, 1) # IOError on failure
         else:
-            fcntl.lockf(lock.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            fcntl.lockf(lockfile.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         return True # Lock succeeded
     except IOError, e:
         return False
 
 def unlock():
+    global lockfile
+    if lockfile is None: # It happens during development!
+        return
     if sys.platform == "win32":
-        msvcrt.locking(lock.fileno(), msvcrt.LK_UNLCK, 1)
+        msvcrt.locking(lockfile.fileno(), msvcrt.LK_UNLCK, 1)
     else:
-        fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
-    lock.close()
+        fcntl.lockf(lockfile.fileno(), fcntl.LOCK_UN)
+    lockfile.close()
     os.unlink(LOCK_FILE)
     # Unlock happens before os._exit, in ui

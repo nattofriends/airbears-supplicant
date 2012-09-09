@@ -3,43 +3,44 @@
 # Based on the PyObjC SystemConfiguration callback demos:
 # <https://svn.red-bean.com/pyobjc/trunk/pyobjc/pyobjc-framework-SystemConfiguration/Examples/CallbackDemo/>
 
+from log import log
+
 from Cocoa import *
 from SystemConfiguration import *
-import signal
+import time
 
-def handleNetworkConfigChange(store, changedKeys, info):
-	print "Global network configuration changed: ", changedKeys
-	newState = SCDynamicStoreCopyValue(store, changedKeys.objectAtIndex_(0))
-	print "New State: ", newState
-	# Kick a change-intolerant service in the head
+# We are not main thread, therefore need to make own NSAutoreleasePool.
 
-def clean_shutdown():
-	CFRunLoopStop(CFRunLoopGetCurrent())
-	sys.exit(0)
+class NetworkStatus(object): # Actually, we're signing up for network connects and disconnects. Shouldn't be a problem, though... don't think there's a way of asking only for connect events
+    MIN_ELAPSED = 0.1
 
-# This uses the SystemConfiguration framework to get a SCDynamicStore session
-# and register for certain events. See the Appl SystemConfiguration
-# documentation for details:
-#
-# <http://developer.apple.com/documentation/Networking/Reference/SysConfig/SCDynamicStore/CompositePage.html>
-#
-# TN1145 may also be of interest:
-#	<http://developer.apple.com/technotes/tn/tn1145.html>
+    def handleNetworkConfigChange(self, store, changedKeys, info):
+        pool = NSAutoreleasePool.alloc().init()
+        newState = SCDynamicStoreCopyValue(store, changedKeys.objectAtIndex_(0))
+        
+        if newState is None:
+            return # No point trying to log on if we have no connectivity -- although we have that DNS resolution check, there is no reason to continue here if we have nothing to gain
+        
+        # SCDynamicStore tends to notify us twice each network change, not sure exactly why. Don't respond to it if the time since last change is less than self.MIN_ELAPSED.
+        new_last_updated = time.time()
+        delta = new_last_updated - self.last_updated
+        self.last_updated = new_last_updated
+        
+        if delta < self.MIN_ELAPSED:
+            log("Change notification delta too little, ignoring...")
+            return
+    
+        self.connection_callback()
+        del pool
 
-store = SCDynamicStoreCreate(None, "global-network-watcher", handleNetworkConfigChange, None)
+    def __init__(self, connection_callback):
+        self.connection_callback = connection_callback
+        self.last_updated = 0
 
-# This is a simple script which only looks for IP-related changes but many
-# other things are available. The easiest way to see what is available is to
-# use the command-line scutil's list command.
-
-# JJM: We need to add 'State:/Network/Global/IPv6' as well
-SCDynamicStoreSetNotificationKeys(store, None, [ 'State:/Network/Global/IPv4', ])
-
-# Get a CFRunLoopSource for our store session and add it to the application's runloop:
-CFRunLoopAddSource(CFRunLoopGetCurrent(), SCDynamicStoreCreateRunLoopSource(None, store, 0), kCFRunLoopCommonModes)
-
-# Add a signal handler so we can shutdown cleanly if we get a ^C:
-# BUG: This does not work - it's necessary to ^Z or kill from another window
-signal.signal(signal.SIGINT, clean_shutdown)
-
-CFRunLoopRun()
+    def register(self):
+        pool = NSAutoreleasePool.alloc().init()
+        store = SCDynamicStoreCreate(None, "airbears-supplicant-" + str(time.time()), self.handleNetworkConfigChange, None)
+        SCDynamicStoreSetNotificationKeys(store, None, [ 'State:/Network/Global/IPv4', ])
+        CFRunLoopAddSource(CFRunLoopGetCurrent(), SCDynamicStoreCreateRunLoopSource(None, store, 0), kCFRunLoopCommonModes)
+        del pool
+        CFRunLoopRun()
