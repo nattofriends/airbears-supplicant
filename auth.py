@@ -96,7 +96,10 @@ def authenticate(username, password, cas_no_redir = False): # [username, passwor
     # So we get another notification and try to log in again.
     first_calnet_login = opener.open(cas_real_url).read()
     if first_calnet_login.find("already logged in to") != -1:
-        log("Already logged in before attempting authentication (WLAN authentication redirect succeeded")
+        log("Already logged in before attempting authentication (WLAN authentication redirect succeeded)")
+        # Do this anyway
+        content = opener.open(WLAN_LANDING_URL).read()
+        # Hope we see it again, I am too lazy to check
         return True
 
     # Otherwise, attempt the authentication

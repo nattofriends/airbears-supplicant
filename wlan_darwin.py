@@ -26,6 +26,7 @@ def get_connected_wireless(): # I _think_ I might have to call [CWInterface inte
     if CWInterface is None:
         raise SystemError('Unable to load CWInterface.') # Possibly < 10.6?
         
+    # We really should be calling interfaceNames() and then calling interfaceWithName(name) on each one.
     default_interface = CWInterface.interface()
     if default_interface is None or not default_interface:
         # raise SystemError('Unable to load wireless interface.') # If it's not there, don't complain
