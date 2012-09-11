@@ -11,7 +11,7 @@ This is a separate branch of the excellent Windows/Mac [Airbears Supplicant](htt
 
 Credentials
 --------------
-AirBears Supplicant uses the Android Account Manager to securely store your CalNet ID and passphrase. As a result, it requires several AccountManager related permissions, including, but not limited to, `AUTHENTICATE_ACCOUNTS`, `GET_ACCOUNTS`, `MANAGE_ACCOUNTS`, and `USE_CREDENTIALS`.
+AirBears Supplicant uses the standard [Android KeyStore](http://developer.android.com/reference/java/security/KeyStore.html) to securely store your CalNet credentials.
 
 Platform Dependencies
 ---------------------
