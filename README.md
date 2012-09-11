@@ -19,4 +19,4 @@ Currently, Airbears Supplicant targets Android 2.2 and above. This may change in
 
 Additional Permissions
 ----------------------
-The `INTERNET` permission is required, and its use is self explanatory. AirBears Supplicant will never transmit your password to any third-party besides the CalNet Authentation Service.
+The `INTERNET` permission is required, and its use is self explanatory. To facilitate automatic authentication, AirBears Supplicant also requires the `ACCESS_WIFI_STATE` to subscribe to state change notifications, and read the SSID of the network you are currently connected to. AirBears Supplicant will never transmit your password to any third-party besides the CalNet Authentation Service.

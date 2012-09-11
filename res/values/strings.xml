@@ -1,11 +1,20 @@
 <resources>
 
     <string name="app_name">Airbears Supplicant</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_main">Airbears Supplicant</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
+    <string name="username">CalNet ID</string>
+    <string name="password">Passphrase (Case sensitive)</string>
     <string name="save_and_validate">Save and Validate</string>
     <string name="menu_exit">Exit Airbears Supplicant</string>
+    <string name="login_welcome">Please enter your CalNet ID and passphrase.</string>
+    <string name="airbears_status">Airbears Status:</string>
+    <string name="calnet_credentials">Enter CalNet Credentials</string>
+    <string name="airbears_status_not_connected">Not Connected</string>
+    <string name="airbears_status_waiting_dns">Waiting for DNS</string>
+    <string name="airbears_status_authenticating">Authenticating</string>
+    <string name="airbears_status_done">Authenticated</string>
+    <string name="airbears_status_invalid_creds">Incorrect credentials!</string>
+    <string name="airbears_status_no_creds">Waiting for credentials&#8230;</string>
+    <string name="enter_calnet">Enter/Update CalNet Credentials</string>
+    <string name="android_tan">Android-tan</string>
 
 </resources>
