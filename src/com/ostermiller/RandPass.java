@@ -20,8 +20,6 @@ package com.ostermiller;
 
 
 import java.security.SecureRandom;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.Vector;
 
 import com.ostermiller.util.PasswordVerifier;
@@ -51,13 +49,6 @@ public class RandPass {
 	 * @since ostermillerutils 1.00.00
 	 */
 	public static final String version = "1.1";
-
-	/**
-	 * Locale specific strings displayed to the user.
-	 * 
-	 * @since ostermillerutils 1.00.00
-	 */
-	protected static ResourceBundle labels = ResourceBundle.getBundle("com.Ostermiller.util.RandPass", Locale.getDefault());
 
 	/**
 	 * Default length for passwords

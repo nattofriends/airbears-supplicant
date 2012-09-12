@@ -24,7 +24,7 @@ import android.util.Log;
 import com.ostermiller.RandPass;
 
 public class CredentialStorage {
-	private static final String logTag = "AB_SUPP::CredentialStorage";
+	private static final String LOGTAG = "AB_SUPP::CredentialStorage";
 
 	private static class CredentialStorageLoader {
 		private final static CredentialStorage instance = new CredentialStorage();
@@ -53,12 +53,12 @@ public class CredentialStorage {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(fis, Charset.defaultCharset()));
 			int chars = reader.read(keystorekey);
 
-			Log.i(logTag, "Successfully read " + chars + " chars from file.");
+			Log.i(LOGTAG, "Successfully read " + chars + " chars from file.");
 
 			reader.close();
 			fis.close();
 		} catch (IOException e) {
-			Log.i(logTag, "Keystore key was inaccessable, generating a new key.", e);
+			Log.i(LOGTAG, "Keystore key was inaccessable, generating a new key.", e);
 
 			RandPass rp = new RandPass(new SecureRandom(), RandPass.PRINTABLE_ALPHABET);
 			rp.getPassChars(keystorekey);
@@ -70,7 +70,7 @@ public class CredentialStorage {
 				writer.close();
 				fos.close();
 			} catch (IOException e2) {
-				Log.e(logTag, "Unable to save keystore key... D:", e2);
+				Log.e(LOGTAG, "Unable to save keystore key... D:", e2);
 			}
 		}
 
@@ -86,10 +86,10 @@ public class CredentialStorage {
 				ks = KeyStore.getInstance(KeyStore.getDefaultType());
 				ks.load(c.openFileInput("keystore.keystore"), keystorekey);
 
-				Log.i(logTag, "Successfully loaded keystore from file.");
+				Log.i(LOGTAG, "Successfully loaded keystore from file.");
 			}
 		} catch (IOException e) {
-			Log.i(logTag, "Keystore was inaccessable, generating new keystore.");
+			Log.i(LOGTAG, "Keystore was inaccessable, generating new keystore.");
 
 			try {
 				ks = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -97,11 +97,11 @@ public class CredentialStorage {
 
 				saveKeystore();
 			} catch (Exception ex) {
-				Log.e(logTag, "Unable to store new keystore, giving up.", ex);
+				Log.e(LOGTAG, "Unable to store new keystore, giving up.", ex);
 			}
 
 		} catch (Exception e) {
-			Log.e(logTag, "Error loading or creating keystore.", e);
+			Log.e(LOGTAG, "Error loading or creating keystore.", e);
 		}
 	}
 
@@ -111,7 +111,7 @@ public class CredentialStorage {
 		try {
 			return ks.containsAlias("calnet-username") && ks.containsAlias("calnet-himitsu");
 		} catch (KeyStoreException e) {
-			Log.e(logTag, "Error accessing keystore!", e);
+			Log.e(LOGTAG, "Error accessing keystore!", e);
 
 			return false;
 		}
@@ -126,7 +126,7 @@ public class CredentialStorage {
 
 			return s;
 		} catch (Exception e) {
-			Log.e(logTag, "Couldn't retrieve CalNet ID.", e);
+			Log.e(LOGTAG, "Couldn't retrieve CalNet ID.", e);
 		}
 
 		return "";
@@ -141,7 +141,7 @@ public class CredentialStorage {
 
 			return s;
 		} catch (Exception e) {
-			Log.e(logTag, "Couldn't retrieve CalNet passphrase.", e);
+			Log.e(LOGTAG, "Couldn't retrieve CalNet passphrase.", e);
 		}
 
 		return "";
@@ -153,7 +153,7 @@ public class CredentialStorage {
 			ks.setEntry("calnet-username", new SecretKeyEntry(sks), entryProtection);
 			saveKeystore();
 		} catch (Exception e) {
-			Log.e(logTag, "Couldn't save CalNet ID.", e);
+			Log.e(LOGTAG, "Couldn't save CalNet ID.", e);
 		}
 	}
 
@@ -163,7 +163,7 @@ public class CredentialStorage {
 			ks.setEntry("calnet-himitsu", new SecretKeyEntry(sks), entryProtection);
 			saveKeystore();
 		} catch (Exception e) {
-			Log.e(logTag, "Couldn't save CalNet ID.", e);
+			Log.e(LOGTAG, "Couldn't save CalNet ID.", e);
 		}
 	}
 
@@ -175,7 +175,7 @@ public class CredentialStorage {
 	private void saveKeystore() throws IOException, GeneralSecurityException {
 		FileOutputStream fis = c.openFileOutput("keystore.keystore", Context.MODE_PRIVATE);
 		ks.store(fis, keystorekey);
-		Log.i(logTag, "Successfully updated/created keystore.");
+		Log.i(LOGTAG, "Successfully updated/created keystore.");
 	}
 
 	public static CredentialStorage getInstance(Context c) {

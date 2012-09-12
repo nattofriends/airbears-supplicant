@@ -28,7 +28,7 @@ import android.net.http.AndroidHttpClient;
 import android.util.Log;
 
 public class WLANAuthenticator {
-	private static final String LOGTAG = "AB_SUPP::CALNET";
+	private static final String LOGTAG = "AB_SUPP::WLANAuthenticator";
 	private static final String CAS_NO_REDIR_URL = "https://auth.berkeley.edu/cas/login";
 	private static final String CAS_URL = "https://auth.berkeley.edu/cas/login?service=https%3a%2f%2fwlan.berkeley.edu%2fcgi-bin%2flogin%2fcalnet.cgi%3fsubmit%3dCalNet%26url%3d";
 	private static final String WLAN_LANDING_URL = "https://wlan.berkeley.edu/cgi-bin/login/calnet.cgi?url=&count=1";
@@ -44,6 +44,7 @@ public class WLANAuthenticator {
 		
 		ctx.setAttribute(ClientContext.COOKIE_STORE, cookies);
 		params.setBooleanParameter(ClientPNames.HANDLE_REDIRECTS, true);
+		params.setBooleanParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
 	}
 
 	private WLANAuthenticator() {

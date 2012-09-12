@@ -23,7 +23,7 @@ import com.nol888.airbears.supplicant.WLANAuthenticator.AuthenticationResult;
 
 public class SupplicantService extends Service {
 	private static final int STATIC_NOTIFICATION = 1;
-	private static final String LOGTAG = "AB_SUPP::SVC";
+	private static final String LOGTAG = "AB_SUPP::SupplicantService";
 
 	public static final String ACTION_AUTHENTICATE = "com.nol888.airbears.supplicant.action.AUTHENTICATE";
 
