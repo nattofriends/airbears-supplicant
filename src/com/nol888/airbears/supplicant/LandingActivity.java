@@ -70,9 +70,6 @@ public class LandingActivity extends Activity {
 			i = new Intent(this, CredentialsActivity.class);
 			startActivity(i);
 		}
-		
-		// Register UI update timer.
-		mHandler.postDelayed(mUpdateUI, UI_UPDATE_MILLIS);
 	}
 
 	@Override
@@ -80,6 +77,14 @@ public class LandingActivity extends Activity {
 		super.onPause();
 
 		mHandler.removeCallbacks(mUpdateUI);
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// Register UI update timer.
+		mHandler.postDelayed(mUpdateUI, UI_UPDATE_MILLIS);
 	}
 
 	@Override
