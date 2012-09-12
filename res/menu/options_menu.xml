@@ -1,6 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_exit"
+    <item android:id="@+id/menu_force_auth" android:title="@string/menu_force_auth" android:icon="@drawable/ic_menu_refresh"></item><item android:id="@+id/menu_exit"
         android:title="@string/menu_exit"
-        android:orderInCategory="100" android:icon="@drawable/ic_menu_close_clear_cancel">
+        android:icon="@drawable/ic_menu_close_clear_cancel">
     </item>
+    
 </menu>
