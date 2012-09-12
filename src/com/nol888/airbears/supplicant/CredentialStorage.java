@@ -1,4 +1,4 @@
-package com.nol888.airbears.supplicant.security;
+package com.nol888.airbears.supplicant;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
