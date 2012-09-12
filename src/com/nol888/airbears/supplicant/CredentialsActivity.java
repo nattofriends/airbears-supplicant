@@ -2,10 +2,13 @@ package com.nol888.airbears.supplicant;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 import com.nol888.airbears.supplicant.security.CredentialStorage;
@@ -29,16 +32,16 @@ public class CredentialsActivity extends Activity {
 		btnSave.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// save/update calnet account
-				CredentialStorage cs = CredentialStorage.getInstance(CredentialsActivity.this);
-				EditText txtUsername = (EditText) findViewById(R.id.txtUsername);
-				EditText txtPassword = (EditText) findViewById(R.id.txtPassword);
-				
-				
-				cs.setCalnetId(txtUsername.getText().toString());
-				cs.setCalnetPassphrase(txtPassword.getText().toString());
-
-				Toast.makeText(CredentialsActivity.this, "CalNet credentials updated successfully!", Toast.LENGTH_SHORT).show();
+				saveCreds();
+			}
+		});
+		EditText txtPassword = (EditText) findViewById(R.id.txtPassword);
+		txtPassword.setImeActionLabel("Update", KeyEvent.KEYCODE_ENTER);
+		txtPassword.setOnEditorActionListener(new OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+				saveCreds();
+				return true;
 			}
 		});
     }
@@ -50,4 +53,17 @@ public class CredentialsActivity extends Activity {
 		overridePendingTransition(R.anim.hold, R.anim.slide_out_down);
 	}
     
+	private void saveCreds() {
+		// save/update calnet account
+		CredentialStorage cs = CredentialStorage.getInstance(CredentialsActivity.this);
+		EditText txtUsername = (EditText) findViewById(R.id.txtUsername);
+		EditText txtPassword = (EditText) findViewById(R.id.txtPassword);
+
+		cs.setCalnetId(txtUsername.getText().toString());
+		cs.setCalnetPassphrase(txtPassword.getText().toString());
+
+		Toast.makeText(CredentialsActivity.this, "CalNet credentials updated successfully!", Toast.LENGTH_SHORT).show();
+
+		finish();
+	}
 }

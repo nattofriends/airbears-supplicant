@@ -14,6 +14,7 @@
     <string name="airbears_status_done">Authenticated</string>
     <string name="airbears_status_invalid_creds">Incorrect credentials!</string>
     <string name="airbears_status_no_creds">Waiting for credentials&#8230;</string>
+    <string name="airbears_status_service_starting">Waiting for service start&#8230;</string>
     <string name="enter_calnet">Enter/Update CalNet Credentials</string>
     <string name="android_tan">Android-tan</string>
 

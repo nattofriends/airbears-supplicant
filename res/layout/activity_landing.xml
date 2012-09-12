@@ -13,7 +13,7 @@
         android:layout_margin="5dp"
         android:text="@string/airbears_status"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
+
     <TextView
         android:id="@+id/statusText"
         android:layout_width="wrap_content"
@@ -21,7 +21,8 @@
         android:layout_alignBaseline="@+id/statusLabel"
         android:layout_alignBottom="@+id/statusLabel"
         android:layout_toRightOf="@+id/statusLabel"
-        android:text="@string/airbears_status_no_creds" />
+        android:text="@string/airbears_status_service_starting" />
+
 <Button
         android:id="@+id/btnRegister"
         android:layout_width="fill_parent"
