@@ -8,14 +8,16 @@
     <string name="login_welcome">Please enter your CalNet ID and passphrase.</string>
     <string name="airbears_status">Airbears Status:</string>
     <string name="calnet_credentials">Enter CalNet Credentials</string>
-    <string name="airbears_status_not_connected">Not Connected</string>
+    <string name="airbears_status_not_connected">Not Connected to AirBears</string>
     <string name="airbears_status_waiting_dns">Waiting for DNS</string>
     <string name="airbears_status_authenticating">Authenticating</string>
     <string name="airbears_status_done">Authenticated</string>
     <string name="airbears_status_invalid_creds">Incorrect credentials!</string>
     <string name="airbears_status_no_creds">Waiting for credentials&#8230;</string>
-    <string name="airbears_status_service_starting">Waiting for service start&#8230;</string>
+    <string name="airbears_status_service_starting">Connecting to service&#8230;</string>
+    <string name="airbears_status_error">Error communicating with CalNet or AirBears!</string>
     <string name="enter_calnet">Enter/Update CalNet Credentials</string>
     <string name="android_tan">Android-tan</string>
+    <string name="menu_force_auth">Force AirBears Authentication</string>
 
 </resources>

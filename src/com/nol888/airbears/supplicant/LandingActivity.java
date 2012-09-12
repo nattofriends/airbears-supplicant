@@ -15,10 +15,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.nol888.airbears.supplicant.security.CredentialStorage;
 
 public class LandingActivity extends Activity {
-	private final long UI_UPDATE_MILLIS = 20;
+	private final long UI_UPDATE_MILLIS = 50;
 
 	private ServiceConnection mConnection = new ServiceConnection() {
 		@Override
@@ -64,7 +63,6 @@ public class LandingActivity extends Activity {
 		// Bind to instance of the supplicant service.
 		Intent i = new Intent(this, SupplicantService.class);
 		bindService(i, mConnection, Service.BIND_AUTO_CREATE);
-		startService(i);
 
 		// If we don't have credentials, go ahead and prompt the user for it.
 		CredentialStorage cs = CredentialStorage.getInstance(this);
@@ -103,6 +101,11 @@ public class LandingActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.menu_exit:
 			shutdown();
+			return true;
+		case R.id.menu_force_auth:
+			Intent i = new Intent(this, SupplicantService.class);
+			i.setAction(SupplicantService.ACTION_AUTHENTICATE);
+			startService(i);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

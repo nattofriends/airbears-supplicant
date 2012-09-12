@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
-import com.nol888.airbears.supplicant.security.CredentialStorage;
 
 public class CredentialsActivity extends Activity {
 
