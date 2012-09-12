@@ -224,7 +224,7 @@ public class SupplicantService extends Service {
 						setAuthenticationState(AuthenticationState.NOT_CONNECTED);
 					} else if (info.getState() == State.CONNECTED) {
 						// Only care if we connected to a network called AirBears.
-						if ("AirBears".equals(wlanInfo.getSSID()) || true) {
+						if ("AirBears".equals(wlanInfo.getSSID())) {
 							Intent intent = new Intent(SupplicantService.this, SupplicantService.class);
 							intent.setAction(ACTION_AUTHENTICATE);
 							startService(intent);
