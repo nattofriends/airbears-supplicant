@@ -4,7 +4,11 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -23,7 +27,9 @@ public class SupplicantService extends Service {
 	}
 
 	private final IBinder binder = new LocalBinder();
+
 	private NotificationManager mNM;
+	private WifiStateChangeReceiver mWSCR;
 
 	private AuthenticationState status = AuthenticationState.NO_CREDENTIALS;
 
@@ -46,15 +52,17 @@ public class SupplicantService extends Service {
 		notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-		Notification notification = new NotificationCompat.Builder(this)
-				.setSmallIcon(R.drawable.ic_launcher)
-				.setContentTitle("AirBears Supplicant")
-				.setContentText(getString(status.getStringId()))
-				.setContentIntent(contentIntent)
-				.build();
+		Notification notification = new NotificationCompat.Builder(this).setSmallIcon(R.drawable.ic_launcher).setContentTitle("AirBears Supplicant").setContentText(getString(status.getStringId())).setContentIntent(contentIntent).build();
 		notification.flags |= Notification.FLAG_ONGOING_EVENT;
 
 		mNM.notify(STATIC_NOTIFICATION, notification);
+		
+		// Create and register WiFi state change receiver.
+		mWSCR = new WifiStateChangeReceiver();
+		IntentFilter intentFilter = new IntentFilter();
+		intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+		intentFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+		registerReceiver(mWSCR, intentFilter);
 	}
 
 	@Override
@@ -72,6 +80,8 @@ public class SupplicantService extends Service {
 
 		if (mNM != null)
 			mNM.cancel(STATIC_NOTIFICATION);
+		if (mWSCR != null)
+			unregisterReceiver(mWSCR);
 	}
 
 	public AuthenticationState getAuthenticationState() {
@@ -117,5 +127,12 @@ public class SupplicantService extends Service {
 		};
 
 		public abstract int getStringId();
+	}
+
+	private class WifiStateChangeReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context c, Intent i) {
+			Log.d(LOGTAG, "Received WiFi state change intent: " + i);
+		}
 	}
 }
