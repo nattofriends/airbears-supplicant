@@ -2,6 +2,16 @@ from distutils.core import setup
 import py2exe, os, sys
 sys.path.append(".")
 
+try:
+    import wx
+except ImportError:
+    print "wxPython is required to build AirBearsSupplicant."
+    sys.exit(-1)
+    
+if wx.VERSION[0:2] < (2, 9):
+    print "wxPython 2.9 or above is required.")
+    sys.exit(-1)
+
 manifest = """
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1"
