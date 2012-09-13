@@ -17,3 +17,6 @@ local.properties
 
 # ignore keys
 *.keystore
+
+# ignore proguard data
+proguard/**

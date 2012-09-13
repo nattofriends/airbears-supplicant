@@ -60,8 +60,9 @@ public class LandingActivity extends Activity {
 			}
 		});
 
-		// Bind to instance of the supplicant service.
+		// Start and bind to instance of the supplicant service.
 		Intent i = new Intent(this, SupplicantService.class);
+		startService(i);
 		bindService(i, mConnection, Service.BIND_AUTO_CREATE);
 
 		// If we don't have credentials, go ahead and prompt the user for it.
