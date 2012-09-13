@@ -8,7 +8,7 @@ except ImportError:
     sys.exit(-1)
     
 if wx.VERSION[0:2] < (2, 9):
-    print "wxPython 2.9 or above is required.")
+    print "wxPython 2.9 or above is required."
     sys.exit(-1)
     
 # Needs a Cocoa check here
