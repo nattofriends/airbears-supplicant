@@ -101,6 +101,7 @@ class CalNetPasswordDialog(wx.Frame):
         
         buttons = wx.BoxSizer(wx.HORIZONTAL)
         self.button_ok = wx.Button(panel, label = "OK")
+        self.button_ok.bind(wx.EVT_BUTTON, self.onEnter)
         self.button_cancel = wx.Button(panel, label = "Cancel")
         self.button_cancel.Bind(wx.EVT_BUTTON, self.onDontClose)
         self.status = wx.StaticText(panel)
