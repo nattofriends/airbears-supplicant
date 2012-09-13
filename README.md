@@ -8,7 +8,7 @@ bookmarklet in your web browser.
 
 Binaries
 --------
-If you don't feel like building this, you should [download the binary here](http://slush.warosu.org/stuff/airbears_supplicant.exe). A Mac binary is Coming Soon.
+If you don't feel like building this, you should [download the binary here](http://slush.warosu.org/stuff/airbears_supplicant.exe). A Mac binary is Coming Soon. An [android version](https://github.com/nol888/airbears-supplicant/downloads) is available (source in the [android branch](https://github.com/nattofriends/airbears-supplicant/tree/android)).
 
 Credentials
 --------------
