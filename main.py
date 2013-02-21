@@ -25,7 +25,7 @@ log("Started AirBears supplicant")
 log("NO_UI = " + str(NO_UI))
 if not NO_UI:
     tb.notice("Welcome to AirBears Supplicant")
-
+    
 def connection_callback():
     log("Received connection notification")
     if wlan.has_airbears():
@@ -48,3 +48,4 @@ monitor_thread.start()
 # UI cannot run from another thread, for some reason
 if not NO_UI:
     ui.start()
+    connection_callback()

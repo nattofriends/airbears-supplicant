@@ -41,12 +41,15 @@ class TaskBarIcon(wx.TaskBarIcon):
         # self.Bind(wx.EVT_TASKBAR_LEFT_DOWN, self.on_left_down)
     def CreatePopupMenu(self):
         menu = wx.Menu()
+        create_menu_item(menu, 'Force Reauthenticate', self.onForceReauthRequest)
         create_menu_item(menu, 'Change Credentials', self.onShowChangeCredentials)
         create_menu_item(menu, 'Exit', self.onExit)
         return menu
     def onShowChangeCredentials(self, event):
         self.dialog.Show()
         self.dialog.Raise() # They don't automatically go to the front in OSX for some reason
+    def onForceReauthRequest(self, event):
+        auth.authenticate_from_file()
     def onExit(self, event):
         wx.CallAfter(self.Destroy)
     def notice(self, text):
@@ -158,11 +161,13 @@ class CalNetPasswordDialog(wx.Frame):
             self.status.SetLabel("Success!")
             def hideAndClear():
                 # Will be run from worker thread, create own NSAutoreleasePool
-                pool = NSAutoreleasePool.alloc().init()
+                if sys.platform == "darwin":
+                    pool = NSAutoreleasePool.alloc().init()
                 self.password.SetValue("")
                 self.status.SetLabel("")
                 self.Hide()
-                del pool
+                if sys.platform == "darwin":
+                    del pool
             threading.Timer(self.STATUS_DELAY, hideAndClear).start()
         else:
             self.status.SetForegroundColour((255, 0, 0))
